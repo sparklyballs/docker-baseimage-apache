@@ -25,9 +25,6 @@ sed -i "s#listen = 127.0.0.1:9000#listen = /var/run/php5-fpm.sock#g" /etc/php5/p
 sed -i "s#user = nobody#user = abc#g" /etc/php5/php-fpm.conf && \
 sed -i "s#group = nobody#group = abc#g" /etc/php5/php-fpm.conf && \
 cp /etc/apache2/httpd.conf /defaults/apache2.conf && \
-mkdir -p /run/apache2/ && \
-touch /run/apache2/httpd.pid && \
-chown -R abc:abc /run/apache2/httpd.pid && \
 mkdir -p /config/www/modules/ && \
 mkdir -p /config/www/logs/ && \
 mkdir -p /config/www/localhost/htdocs && \
