@@ -1,5 +1,5 @@
 #!/bin/bash
-sed -i "s#/var/www#/config/www#g" /etc/apache2/httpd.conf 
+sed -i "s#/var/www#/config/www#g" /etc/apache2/httpd.conf
 sed -i "s/Listen 80/#Listen 80/g" /etc/apache2/httpd.conf
 sed -i "s/User apache/User abc/g" /etc/apache2/httpd.conf
 sed -i "s/Group apache/Group abc/g" /etc/apache2/httpd.conf
@@ -18,5 +18,5 @@ fi
 
 chown -R abc:abc /var/log/php-fpm.log
 
-mkdir -p /run/apache2/
-chown -R abc:abc /run/apache2/
+mkdir -p /run/apache2
+chown -R abc:abc /run/apache2
