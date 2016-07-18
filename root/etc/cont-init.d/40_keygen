@@ -4,5 +4,6 @@ if [[ -f /config/keys/cert.key && -f /config/keys/cert.crt ]]; then
 echo "using keys found in /config/keys"
 else
 echo "generating self-signed keys in /config/keys, you can replace these with your own keys if required"
-/sbin/setuser abc openssl req -new -x509 -days 3650 -nodes -out /config/keys/cert.crt -keyout /config/keys/cert.key -subj "$SUBJECT"
+openssl req -new -x509 -days 3650 -nodes -out /config/keys/cert.crt -keyout /config/keys/cert.key -subj "$SUBJECT"
+chown abc:abc /config/keys/ -R
 fi
