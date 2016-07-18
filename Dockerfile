@@ -1,4 +1,4 @@
-FROM linuxserver/baseimage
+FROM lsiobase/alpine
 MAINTAINER Sparklyballs <sparklyballs@linuxserver.io>
 
 # Install packages

@@ -1,3 +1,7 @@
 #!/usr/bin/with-contenv sh
 
+<<<<<<< HEAD
 exec /usr/sbin/apachectl -D FOREGROUND
+=======
+exec /usr/sbin/apachectl -D FOREGROUND
+>>>>>>> 977b68f48d214f20bc44399cdae5e1d7e22ac62a
