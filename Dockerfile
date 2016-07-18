@@ -35,8 +35,7 @@ cp /var/www/modules/* /config/www/modules/ && \
 mv /etc/apache2/conf.d/proxy.conf /etc/apache2/conf.d/proxy.bak && \
 cp /defaults/index.html /config/www/localhost/htdocs
 
-# expose ports
-EXPOSE 80 443
 
-# set volumes
+# ports and volumes
+EXPOSE 80 443
 VOLUME /config
