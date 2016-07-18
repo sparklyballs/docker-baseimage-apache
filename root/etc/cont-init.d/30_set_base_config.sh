@@ -19,5 +19,9 @@ cp /defaults/index.html /config/www/index.html
 fi
 
 chown -R abc:abc /config
-chown -R abc:abc /var/lib/apache2
+chown -R abc:abc /var/log/php-fpm.log
+
+touch /run/apache2/httpd.pid
+mkdir -p /run/apache2/
+chown -R abc:abc /run/apache2/httpd.pid
 
