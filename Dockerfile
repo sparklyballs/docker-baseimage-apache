@@ -1,38 +1,39 @@
-FROM linuxserver/baseimage
+FROM lsiobase/alpine
 MAINTAINER Sparklyballs <sparklyballs@linuxserver.io>
 
-# Set correct environment variables
-ENV BASE_APTLIST="apache2-mpm-worker libapache2-mod-fastcgi openssl php5 php5-cli php5-curl php5-fpm" LANG="en_US.UTF-8" LANGUAGE="en_US:en" LC_ALL="en_US.UTF-8"
+# Install packages
+RUN \
+apk add --no-cache \
+        apache2-proxy \
+        apache2-ssl \
+        apache2-utils \
+        fcgi \
+	php5 \
+        php5-fpm \
+        php5-curl \
+        php5-cli \
+        openssl
 
-# Set the locale
-RUN locale-gen en_US.UTF-8
-
-# install main packages
-RUN apt-get update -q && \
-apt-get install $BASE_APTLIST -qy && \
-
-# cleanup 
-apt-get clean -y && \
-rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# add some files 
-ADD defaults/ /defaults/
-ADD init/ /etc/my_init.d/
-ADD services/ /etc/service/
-RUN chmod -v +x /etc/service/*/run /etc/my_init.d/*.sh && \
+# add local files
+COPY root/ /
 
 # enable apache mods
-cp /etc/apache2/ports.conf /defaults/ports.conf && \
+RUN \
 mv /defaults/envvars /etc/apache2/envvars && \
-mv /defaults/php5-fpm.conf /etc/apache2/conf-available/ && \ 
-ln -s /etc/apache2/conf-available/php5-fpm.conf /etc/apache2/conf-enabled/ && \
-sed -i "s/www-data/abc/g" /etc/php5/fpm/pool.d/www.conf && \
-sed -i "s#/var/www#/config/www#g" /etc/apache2/apache2.conf && \
-sed -i "s#IncludeOptional sites-enabled#IncludeOptional /config/apache/site-confs#g" /etc/apache2/apache2.conf && \
-sed -i '/Include ports.conf/s/^/#/g' /etc/apache2/apache2.conf && \
-echo "Include /config/apache/ports.conf"  >> /etc/apache2/apache2.conf && \
-cp /etc/apache2/apache2.conf /defaults/apache2.conf && \
-a2enmod actions rewrite fastcgi alias ssl
+mv /defaults/php5-fpm.conf /etc/apache2/conf.d/ && \
+sed -i "s#listen = 127.0.0.1:9000#listen = /var/run/php5-fpm.sock#g" /etc/php5/php-fpm.conf && \
+sed -i "s#user = nobody#user = abc#g" /etc/php5/php-fpm.conf && \
+sed -i "s#group = nobody#group = abc#g" /etc/php5/php-fpm.conf && \
+cp /etc/apache2/httpd.conf /defaults/apache2.conf && \
+mkdir -p /run/apache2/ && \
+touch /run/apache2/httpd.pid && \
+chown -R abc:abc /run/apache2/httpd.pid && \
+mkdir -p /config/www/modules/ && \
+mkdir -p /config/www/logs/ && \
+mkdir -p /config/www/localhost/htdocs && \
+cp /var/www/modules/* /config/www/modules/ && \
+mv /etc/apache2/conf.d/proxy.conf /etc/apache2/conf.d/proxy.bak && \
+cp /defaults/index.html /config/www/localhost/htdocs
 
 # expose ports
 EXPOSE 80 443
